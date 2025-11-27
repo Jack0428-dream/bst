@@ -56,7 +56,7 @@ function balancedTree(array, start, end) {
 class Tree {
     constructor(array) {
         this.array = array;
-        // root = this.buildTree(arr);
+        root = this.buildTree(array);
     }
 
     buildTree(arr) {
@@ -86,8 +86,22 @@ class Tree {
     }
 
 
-    insert(value) {
+    insert(root, value) {
+        //start from L-0 root
+        //traverse by comparing the value with roots
+        //insert the value
 
+        if(root === null) {
+            return new Node(value);
+        }
+
+        if(value < root.data) {
+            root.left = this.insert(root.left, value);
+        } else {
+            root.right = this.insert(root.right, value);
+        }
+
+        return root;
     }
 
     deleteItem(value) {
