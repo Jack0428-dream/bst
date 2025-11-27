@@ -1,43 +1,39 @@
 function mergeSort(array) {
-    let lastIndex = array.length - 1;
+    let n = array.length;
 
-    if(array.length !== 1 && lastIndex % 2 !== 0) {
-        let left = array.slice(0, (lastIndex/2).toFixed(0));
-        left = mergeSort(left);
-        let right = mergeSort(array);
-    } else if(array.length !== 1 && lastIndex % 2 === 0) {
-        let left = array.slice(0, (lastIndex/2));
-        left = mergeSort(left);
-        let right = mergeSort(array);
-    } 
-
-    // merge
-    if(array.length = 1) {
+    if(array.length === 0) {
         return array;
     }
 
+    if(array.length === 1) {
+        return array;
+    }
+
+    let left = array.slice(0, Math.floor(n/2));
+    let right = array.slice(Math.floor(n/2));
+
+    let sortedLeft = mergeSort(left);
+    let sortedRight = mergeSort(right);
+
     let sorted = [];
-    while(left.length !== 0) {
-        let tempL = left.shift();
-        let tempR = right.shift();
-        if(tempL < tempR) {
-            sorted.push(tempL);
-            tempL = left.shift();
-        } else if(tempL > tempR) {
-            sorted.push(tempR);
-            tempR = right.shift();
-        } else if(tempL === tempR) {
-            sorted.push(tempL);
-            tempL = left.shift();
-            tempR = right.shift();
+
+    while(sortedLeft.length && sortedRight.length) {
+        if(sortedLeft[0] < sortedRight[0]) {
+            sorted.push(sortedLeft.shift());
+        } else if(sortedLeft[0] > sortedRight[0]) {
+            sorted.push(sortedRight.shift());
+        } else if(sortedLeft[0] === sortedRight[0]) {
+            sorted.push(sortedLeft.shift());
+            let erase = sortedRight.shift();
         }
     }
-    
-    return sorted;
+
+    return sorted.concat(sortedLeft, sortedRight);
 }
 
 class Node {
-    constructor() {
+    constructor(data) {
+        this.data = data;
         right = null;
         left = null;
     }
@@ -48,7 +44,7 @@ function balancedTree(array, start, end) {
         return null;
     }
 
-    let mid = Math.floor((start + end)/2);
+    let mid = Math.floor((start+end)/2);
     let root = new Node(array[mid]);
 
     root.left = balancedTree(array, start, mid-1);
@@ -58,11 +54,12 @@ function balancedTree(array, start, end) {
 }
 
 class Tree {
-    constructor() {
-        root = null;
+    constructor(array) {
+        this.array = array;
+        // root = this.buildTree(arr);
     }
 
-    buildTree(array) {
+    buildTree(arr) {
         // sort the given array
         // sort the left half
         // sort the right half
@@ -72,8 +69,7 @@ class Tree {
         let sortedArr = mergeSort(array);
 
         // build the balanced binary search tree
-        return balancedTree(array, 0, array.length - 1);
-
+        return balancedTree(sortedArr, 0, sortedArr.length - 1);
     }
 
     prettyPrint(node, prefix = '', isLeft = true) {
@@ -92,8 +88,6 @@ class Tree {
 
     insert(value) {
 
-
-        
     }
 
     deleteItem(value) {
@@ -132,3 +126,10 @@ class Tree {
 
     }
 }
+
+
+console.log(mergeSort([]));
+console.log(mergeSort([73]));
+console.log(mergeSort([1, 2, 3, 4, 5]));
+console.log(mergeSort([3, 2, 1, 13, 8, 5, 0, 1]));
+console.log(mergeSort([105, 79, 100, 110]));
