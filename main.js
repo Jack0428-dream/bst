@@ -104,16 +104,69 @@ class Tree {
         return root;
     }
 
-    deleteItem(value) {
+    deleteItem(root, value) {
+        if(root === null) return root;
 
+        if(root.data < value) {
+            root.right = this.deleteItem(root.right, value);
+        } else if(root.data > value) {
+            root.left = this.deleteItem(root.left, value);
+        }
+
+        if(root.data === value && root.left === null && root.right === null) {
+            root = null;
+        } else if(root.data === value && root.left !== null && root.right !== null) {
+            root = root.right;
+        } else {
+            if(root.left !== null) {
+                root = root.left;
+            } else {
+                root = root.right;
+            }
+        }
+
+        return root;
     }
 
-    find(value) {
+    find(root, value) {
+        if(root === null) return root;
 
+        if(root.data === value) {
+            return root;
+        }
+
+        if(root.data < value) {
+            root.right = find(root.right, value);
+        } else if(root.data > value) {
+            root.left = find(root.left, value);
+        }
+
+        return root;
     }
 
     levelOrderForEach(callback) {
+        if(typeof callback !== "function") {
+            throw new Error("It needs to be a function");
+        }
 
+        let addAdr = [];
+        if(this.root === null) return this.root;
+
+        addAdr.push(this.root);
+
+        while(addAdr.length > 0) {
+            let current = addAdr.shift();
+
+            if(current.left !== null) {
+                addAdr.push(current.left);
+            }
+
+            if(current.right !== null) {
+                addAdr.push(current.right);
+            }
+
+            callback(current);
+        } 
     }
 
     inOrderForEach(callback) {
@@ -121,6 +174,10 @@ class Tree {
     }
 
     preOrderForEach(callback) {
+
+    }
+
+    postOrderForEach(callback) {
 
     }
 
@@ -141,9 +198,8 @@ class Tree {
     }
 }
 
-
-console.log(mergeSort([]));
-console.log(mergeSort([73]));
-console.log(mergeSort([1, 2, 3, 4, 5]));
-console.log(mergeSort([3, 2, 1, 13, 8, 5, 0, 1]));
-console.log(mergeSort([105, 79, 100, 110]));
+// console.log(mergeSort([]));
+// console.log(mergeSort([73]));
+// console.log(mergeSort([1, 2, 3, 4, 5]));
+// console.log(mergeSort([3, 2, 1, 13, 8, 5, 0, 1]));
+// console.log(mergeSort([105, 79, 100, 110]));
