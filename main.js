@@ -146,11 +146,11 @@ class Tree {
 
     levelOrderForEach(callback) {
         if(typeof callback !== "function") {
-            throw new Error("It needs to be a function");
+            throw new Error("It needs to be a function.");
         }
 
         let addAdr = [];
-        if(this.root === null) return this.root;
+        if(this.root === null) return;
 
         addAdr.push(this.root);
 
@@ -169,16 +169,37 @@ class Tree {
         } 
     }
 
-    inOrderForEach(callback) {
+    inOrderForEach(root, callback) {
+        if(typeof callback !== "function") {
+            throw new Error("It needs to be a function.");
+        }
 
+        if(root === null) return; 
+        this.inOrderForEach(root.left, callback);
+        callback(root);
+        this.inOrderForEach(root.right, callback);
     }
 
-    preOrderForEach(callback) {
+    preOrderForEach(root, callback) {
+        if(typeof callback !== "function") {
+            throw new Error("It needs to be a function.");
+        }
 
+        if(root === null) return;
+        callback(root);
+        this.preOrderForEach(root.left, callback);
+        this.preOrderForEach(root.right, callback);
     }
 
-    postOrderForEach(callback) {
+    postOrderForEach(root, callback) {
+        if(typeof callback !== "function") {
+            throw new Error("It needs to be a function.");
+        }
 
+        if(root === null) return;
+        this.postOrderForEach(root.left, callback);
+        this.postOrderForEach(root.right, callback);
+        callback(root);
     }
 
     height(value) {
@@ -198,8 +219,3 @@ class Tree {
     }
 }
 
-// console.log(mergeSort([]));
-// console.log(mergeSort([73]));
-// console.log(mergeSort([1, 2, 3, 4, 5]));
-// console.log(mergeSort([3, 2, 1, 13, 8, 5, 0, 1]));
-// console.log(mergeSort([105, 79, 100, 110]));
