@@ -205,22 +205,32 @@ class Tree {
     height(value) {
         // implement traverse with iteration 
         // then return height
-        let height = 0;
-
-        let current = this.root;    
+        let current = this.root;
         while(current !== null) {
             if(current.data === value) {
-                if(current )
+                break;
             }
 
-            if(current.data > value) {
-                current = current.left
-            }else if(current.data < value) {
-                current = current.right
+            if(current.data < value) {
+                current = current.right;
+            } else {
+                current = current.left;
             }
         }
 
-        return height;
+        if(current === null) return null;
+
+        function heightsubtree(node) {
+            if(child === null) {
+                return 0;
+            }
+
+            let leftH = heightsubtree(node.left);
+            let rightH = heightsubtree(node.right);
+            return  1 + Math.max(leftH, rightH);
+        }
+        
+        return heightsubtree(current);
     }
 
     depth(value) {
