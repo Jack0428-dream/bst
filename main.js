@@ -129,7 +129,7 @@ class Tree {
     }
 
     find(root, value) {
-        if(root === null) return root;
+        if(root === null) return null;
 
         if(root.data === value) {
             return root;
@@ -137,11 +137,11 @@ class Tree {
 
         if(root.data < value) {
             root.right = find(root.right, value);
+            return root.right;
         } else if(root.data > value) {
             root.left = find(root.left, value);
+            return root.left
         }
-
-        return root;
     }
 
     levelOrderForEach(callback) {
@@ -203,11 +203,46 @@ class Tree {
     }
 
     height(value) {
+        // implement traverse with iteration 
+        // then return height
+        let height = 0;
 
+        let current = this.root;    
+        while(current !== null) {
+            if(current.data === value) {
+                if(current )
+            }
+
+            if(current.data > value) {
+                current = current.left
+            }else if(current.data < value) {
+                current = current.right
+            }
+        }
+
+        return height;
     }
 
     depth(value) {
+        let depth = 0;
 
+        let current = this.root;
+        while(current !== null) {
+
+            if(current.data === value) {
+                return depth;
+            }
+
+            if(current.data > value) {
+                current = current.left;
+                depth += 1;
+            } else if(current.data < value) {
+                current = current.right;
+                depth += 1;
+            }
+        }
+
+        return null;
     }
 
     isBalanced() {
