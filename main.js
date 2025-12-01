@@ -255,12 +255,49 @@ class Tree {
         return null;
     }
 
-    isBalanced() {
-       
+    isBalanced(root) {
+        let current = root;
+
+        while(current !== null) {
+            if((this.height(current.left) - this.height(current.left)) >= -1 || (this.height(current.left) - this.height(current.left)) <= 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        let rightsub = this.isBalanced(root.right);
+        let leftsub = this.isBalanced(root.left);
+
+        if(rightsub === true && leftsub === true) {
+            return true;
+        } else {
+           return false;
+        }
     }
 
     rebalance() {
+        let addAdr = [];
+        let newArr = [];
 
+        newArr.push(this.root.data);
+        addAdr.push(this.root);
+        while(addAdr.length > 0) {
+            let current = addAdr.shift();
+
+            if(current.left !== null) {
+                addAdr.push(current.left);
+                newArr.push(current.left.data);
+            }
+
+            if(current.right !== null) {
+                addAdr.push(current.right);
+                newArr.push(current.right.data);
+            }
+        }
+
+        let newRoot = this.buildTree(newArr);
+        return newRoot;
     }
 }
 
