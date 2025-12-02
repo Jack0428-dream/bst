@@ -178,20 +178,20 @@ class Tree {
     }
 
     find(root, value) {
-        if(root === null) return null;
+        // returns the node with the given value
+        let current = root;
 
-        if(root.data === value) {
-            return root;
+        while(current !== null) {
+            if(value > current.data) {
+                current = current.right;
+            } else if(value < current.data){
+                current = current.left;
+            } else {
+                return current
+            }
         }
-
-        if(root.data < value) {
-            root.right = this.find(root.right, value);
-            return root.right;
-        } else if(root.data > value) {
-            root.left = this.find(root.left, value);
-            return root.left
-        }
-    }
+        return null;
+    } 
 
     levelOrderForEach(callback) {
         if(typeof callback !== "function") {
@@ -374,14 +374,3 @@ console.log(testTree.levelOrderForEach(print));
 console.log(testTree.inOrderForEach(testTree.root, print));
 console.log(testTree.preOrderForEach(testTree.root, print));
 console.log(testTree.postOrderForEach(testTree.root, print));
-testTree.insert(testTree.root, 34);
-testTree.insert(testTree.root, 54);
-testTree.insert(testTree.root, 24);
-testTree.insert(testTree.root, 14);
-testTree.insert(testTree.root, 64);
-testTree.insert(testTree.root, 1);
-testTree.insert(testTree.root, 3);
-testTree.insert(testTree.root, 4);
-testTree.insert(testTree.root, 6);
-console.log(testTree.prettyPrint(testTree.root));
-console.log(testTree.isBalanced(testTree.root));
