@@ -34,8 +34,8 @@ function mergeSort(array) {
 class Node {
     constructor(data) {
         this.data = data;
-        right = null;
-        left = null;
+        this.right = null;
+        this.left = null;
     }
 }
 
@@ -56,7 +56,7 @@ function balancedTree(array, start, end) {
 class Tree {
     constructor(array) {
         this.array = array;
-        root = this.buildTree(array);
+        this.root = this.buildTree(array);
     }
 
     buildTree(arr) {
@@ -66,7 +66,7 @@ class Tree {
         // merge the sorted halves
         // recursively slice the array in half
         // merge the array
-        let sortedArr = mergeSort(array);
+        let sortedArr = mergeSort(arr);
 
         // build the balanced binary search tree
         return balancedTree(sortedArr, 0, sortedArr.length - 1);
@@ -77,11 +77,11 @@ class Tree {
             return;
         }
         if (node.right !== null) {
-            prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
+            this.prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
         }
         console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
         if (node.left !== null) {
-            prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
+            this.prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
         }
     }
 
@@ -105,27 +105,76 @@ class Tree {
     }
 
     deleteItem(root, value) {
-        if(root === null) return root;
+        // if(root === null) {
+        //     return null;
+        // }
 
-        if(root.data < value) {
-            root.right = this.deleteItem(root.right, value);
-        } else if(root.data > value) {
+        // if(root.data < value) {
+        //     root.left = this.deleteItem(root.left, value);
+        // } else if(root.data > value) {
+        //     root.right = this.deleteItem(root.right, value);
+        // } else {
+        //     // when we find the target node 
+        //     if(root.right === null && root.left === null) {
+        //         root = null;
+        //     } else if(root.right !== null && root.left !== null) {
+        //         // replace the root 
+        //         // with the smallest node in the right subtree
+        //         let newRoot = findNode(root);
+        //         root = newRoot;
+        //     } else {
+        //         if(root.right !== null) {
+        //             root = root.right;
+        //         } else root = root.left;
+        //     }
+        // }
+
+        // function findNode(root) {
+        //     let curr = root.right;
+        //     while( curr !== null && curr.left !== null) {
+        //         curr = curr.left;
+        //     }
+        //     return curr;
+        // }
+
+        if(root === null) return null;
+
+        // move left or right 
+        if (value < root.data) {
             root.left = this.deleteItem(root.left, value);
-        }
-
-        if(root.data === value && root.left === null && root.right === null) {
-            root = null;
-        } else if(root.data === value && root.left !== null && root.right !== null) {
-            root = root.right;
+        } else if (value > root.data) {
+            root.right = this.deleteItem(root.right, value);
         } else {
-            if(root.left !== null) {
-                root = root.left;
-            } else {
-                root = root.right;
+            // FOUND NODE
+
+            // Case 1 : no children
+            if (root.left === null && root.right === null) {
+                return null;
             }
+            
+            // Case 2: One Child
+            if(root.left === null) return root.right;
+            if(root.right === null) return root.left;
+
+            // Case 3: two children 
+            // Get successor (min in right subtree)
+            let successor = this.findMin(root.right);
+
+            // Replace value
+            root.data = successor.data;
+
+            // Delete successor from right subtree
+            root.right = this.deleteItem(root.right, successor.data);
         }
 
         return root;
+    }
+
+    findMin(node) {
+        while (node.left !== null) {
+            node = node.left;
+        }
+        return node;
     }
 
     find(root, value) {
@@ -136,10 +185,10 @@ class Tree {
         }
 
         if(root.data < value) {
-            root.right = find(root.right, value);
+            root.right = this.find(root.right, value);
             return root.right;
         } else if(root.data > value) {
-            root.left = find(root.left, value);
+            root.left = this.find(root.left, value);
             return root.left
         }
     }
@@ -301,3 +350,38 @@ class Tree {
     }
 }
 
+function random() {
+    let arr = [];
+    
+    while(arr.length < 15) {
+        arr.push(Math.floor(Math.random() * 100))
+    }
+    
+    return arr;
+}
+
+function print(node) {
+    console.log(node.data);
+}
+
+let testArr = random();
+let testTree = new Tree(testArr);
+
+console.log(testTree.isBalanced(testTree.root));
+console.log(testTree);
+console.log(testTree.prettyPrint(testTree.root));
+console.log(testTree.levelOrderForEach(print));
+console.log(testTree.inOrderForEach(testTree.root, print));
+console.log(testTree.preOrderForEach(testTree.root, print));
+console.log(testTree.postOrderForEach(testTree.root, print));
+testTree.insert(testTree.root, 34);
+testTree.insert(testTree.root, 54);
+testTree.insert(testTree.root, 24);
+testTree.insert(testTree.root, 14);
+testTree.insert(testTree.root, 64);
+testTree.insert(testTree.root, 1);
+testTree.insert(testTree.root, 3);
+testTree.insert(testTree.root, 4);
+testTree.insert(testTree.root, 6);
+console.log(testTree.prettyPrint(testTree.root));
+console.log(testTree.isBalanced(testTree.root));
