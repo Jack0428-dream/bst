@@ -270,8 +270,8 @@ class Tree {
         if(current === null) return null;
 
         function heightsubtree(node) {
-            if(child === null) {
-                return 0;
+            if(node === null) {
+                return null;
             }
 
             let leftH = heightsubtree(node.left);
@@ -305,32 +305,52 @@ class Tree {
     }
 
     isBalanced(root) {
-        let current = root;
+        // if(root === null) {
+        //     return true;
+        // }
 
-        while(current !== null) {
-            if((this.height(current.left) - this.height(current.left)) >= -1 || (this.height(current.left) - this.height(current.left)) <= 1) {
-                return true;
-            } else {
-                return false;
-            }
+        // let diff = this.height(root.left.data) - this.height(root.right.data)
+
+        // function check(node) {
+        //     if(node === null) {
+        //         return 0
+        //     }
+        //     // recursively verify if leftsubTree and rightSubtree are balanced
+        //     let leftBalanced = check(node.left);
+        //     let rightBalanced = check(node.right);
+        //     return 1 + 
+
+        // }
+
+        //helper returns height, or -1 if subtree is unbalanced
+        function check(node) {
+            if(node === null) return 0;
+
+            const left = check(node.left);
+            if (left === -1) return -1;
+
+            const right = check(node.right);
+            if(right === -1) return -1;
+
+            // if height differene is too large -> unbalanced
+            if(Math.abs(left - right) > 1) return -1;
+
+            // otherwise return the height of this subtree 
+            return 1 + Math.max(left, right);
         }
 
-        let rightsub = this.isBalanced(root.right);
-        let leftsub = this.isBalanced(root.left);
-
-        if(rightsub === true && leftsub === true) {
+        // tree is balanced if check() didn't return -1
+        if(check(root) !== -1) {
             return true;
-        } else {
-           return false;
-        }
+        } else return false;
+
     }
 
     rebalance() {
-        let addAdr = [];
-        let newArr = [];
 
-        newArr.push(this.root.data);
-        addAdr.push(this.root);
+        let addAdr = [this.root];
+        let newArr = [this.root.data];
+
         while(addAdr.length > 0) {
             let current = addAdr.shift();
 
@@ -345,8 +365,8 @@ class Tree {
             }
         }
 
-        let newRoot = this.buildTree(newArr);
-        return newRoot;
+        this.root = this.buildTree(newArr);
+        return this.root;
     }
 }
 
@@ -374,3 +394,17 @@ console.log(testTree.levelOrderForEach(print));
 console.log(testTree.inOrderForEach(testTree.root, print));
 console.log(testTree.preOrderForEach(testTree.root, print));
 console.log(testTree.postOrderForEach(testTree.root, print));
+testTree.insert(testTree.root, 64);
+testTree.insert(testTree.root, 14);
+testTree.insert(testTree.root, 24);
+testTree.insert(testTree.root, 4);
+testTree.insert(testTree.root, 12);
+testTree.insert(testTree.root, 23);
+testTree.insert(testTree.root, 13);
+testTree.insert(testTree.root, 18);
+console.log(testTree.isBalanced(testTree.root));
+console.log(testTree.prettyPrint(testTree.root));
+testTree.rebalance();
+console.log(testTree.prettyPrint(testTree.root));
+console.log(testTree.isBalanced(testTree.root));
+// console.log(testTree.height(34));
